@@ -1,0 +1,29 @@
+CPU Usage per core
+-update bar chart every so often?
+-convert into line graph - live updates?
+
+CPU temps per core
+-possible?
+-constantly updating bar chart?
+
+overall CPU usage
+-live line graph?
+
+hdd usage
+-bar for each partition
+-update every 30 mins? smth like that
+
+local weather
+-update every 30 mins?
+
+top news headlines
+-refresh every 30 mins?
+-is there a way to get breaking headlines as they happen and update then?
+
+steam
+-concurrent users in top games?
+-update every 15 mins?
+
+overwatch stats
+-update every 10 mins? ~length of time per game
+-have button to update?

@@ -1,0 +1,4 @@
+PIL
+Psutil
+Matplotlib
+Numpy

@@ -1,0 +1,9 @@
+https://github.com/A-Wheeto/Dashboard/blob/master/venv/Scripts/Dashboard.py
+https://psutil.readthedocs.io/en/latest/
+https://pythonspot.com/matplotlib-bar-chart/
+https://numpy.org/doc/stable/reference/generated/numpy.arange.html
+https://matplotlib.org/api/_as_gen/matplotlib.pyplot.barh.html#matplotlib.pyplot.barh
+https://stackoverflow.com/questions/23357798/how-to-draw-grid-lines-behind-matplotlib-bar-graph
+https://chartio.com/resources/tutorials/how-to-save-a-plot-to-a-file-using-matplotlib/
+https://problemsolvingwithpython.com/06-Plotting-with-Matplotlib/06.04-Saving-Plots/
+https://www.c-sharpcorner.com/blogs/basics-for-displaying-image-in-tkinter-python
