@@ -1,3 +1,6 @@
+Top bar
+-dynamic time - updates every minute (using threading?); every second? see cube timing program possibly?
+
 CPU Usage per core
 -update bar chart every so often?
 -convert into line graph - live updates?

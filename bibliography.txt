@@ -1,3 +1,4 @@
+https://www.reddit.com/r/Python/comments/gxsb8v/i_created_a_gui_that_collates_various_interests/
 https://github.com/A-Wheeto/Dashboard/blob/master/venv/Scripts/Dashboard.py
 https://psutil.readthedocs.io/en/latest/
 https://pythonspot.com/matplotlib-bar-chart/
@@ -7,3 +8,9 @@ https://stackoverflow.com/questions/23357798/how-to-draw-grid-lines-behind-matpl
 https://chartio.com/resources/tutorials/how-to-save-a-plot-to-a-file-using-matplotlib/
 https://problemsolvingwithpython.com/06-Plotting-with-Matplotlib/06.04-Saving-Plots/
 https://www.c-sharpcorner.com/blogs/basics-for-displaying-image-in-tkinter-python
+https://docs.python.org/3/library/datetime.html
+https://docs.python.org/2.4/lib/typesseq-strings.html
+https://effbot.org/tkinterbook/tkinter-widget-styling.htm
+https://effbot.org/tkinterbook/canvas.htm
+https://www.tutorialspoint.com/python/python_multithreading.htm
+https://docs.python.org/3/library/threading.html
