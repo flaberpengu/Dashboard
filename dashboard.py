@@ -136,11 +136,16 @@ wholeCPUUsageFlagQueue = queue.Queue(1)
 
 #Makes figure (graph) to plot data on
 figWholeCPUUsage, axWholeCPUUsage = plt.subplots(1,1)
+figWholeCPUUsage.set_facecolor('#bfbfbf')
+figWholeCPUUsage.set_figwidth(6.5)
+figWholeCPUUsage.set_figheight(3)
+figWholeCPUUsage.set_dpi(100)
 #figWholeCPUUsage.figsize(6.5,2)
 #figWholeCPUUsage.dpi(100)
 #figWholeCPUUsage = Figure(figsize=(6.5,3), dpi=100)
 #axWholeCPUUsage = figWholeCPUUsage.add_subplot(111)
 axWholeCPUUsage.axis(ymin=0, ymax=100, xmin=0, xmax=20)
+axWholeCPUUsage.set_facecolor('#bfbfbf')
 firstTimexVals = np.arange(20)
 firstTimeyVals = []
 for a in range(wholeCPUUsageQueue.qsize()):
@@ -186,6 +191,7 @@ def displayWholeCPUUsage(wholeCPUUsageQueue, wholeCPUUsageFlagQueue, axWholeCPUU
 			axWholeCPUUsage.clear()
 			axWholeCPUUsage.plot(xVals,yVals)
 			axWholeCPUUsage.axis(ymin=0, ymax=100, xmin=0, xmax=20)
+			axWholeCPUUsage.set_facecolor('#bfbfbf')
 			#figWholeCPUUsage(
 			fctaWholeCPUUsage = FigureCanvasTkAgg(figWholeCPUUsage, root)
 			fctaWholeCPUUsage.get_renderer().clear()
