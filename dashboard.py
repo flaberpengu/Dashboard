@@ -1,10 +1,17 @@
 import tkinter as tk
 import time
-import processor_info
+#import processor_info
 from PIL import ImageTk,Image
 import datetime as dt
 import threading
 import queue
+import CPUInfo
+import matplotlib
+matplotlib.use("TkAgg")
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+import numpy as np
 
 root = tk.Tk()
 root.geometry('650x1000')
@@ -66,6 +73,7 @@ def getDateString(currentDatetime):
 		returnString += ("%i" % (currentDatetime.day))
 	return returnString
 
+#Queue and flags variables needed
 datetimeQueue = queue.Queue(5)
 dateFlagQueue = queue.Queue(1)
 dateFlagQueue.put(dt.datetime.now())
@@ -76,7 +84,7 @@ def updateDatetime(datetimeQueue):
 	while True:
 		if (datetimeQueue.qsize() == 0):
 			datetimeQueue.put(dt.datetime.now())
-			print("Updated")
+			#print("Updated")
 		else:
 			time.sleep(1)
 
@@ -84,7 +92,7 @@ def updateDatetime(datetimeQueue):
 def displayTime(datetimeQueue, dateFlagQueue):
 	while True:
 		if (datetimeQueue.qsize() != 0):
-			print("GettingTime")
+			#print("GettingTime")
 			newTime = getTimeString(datetimeQueue.get(0))
 			datetimeQueue.task_done()
 			lblTime.configure(text=newTime)
@@ -118,9 +126,88 @@ datetimeUpdater.start()
 timeDisplayer.start()
 dateDisplayer.start()
 
-##Gets and displays image of CPU use per core
-#processor_info.getCPUInfo()
-#cpu_info_image = ImageTk.PhotoImage(Image.open('processor_info_percpu_usage.png'))
-#cpu_info = tk.Canvas(root, width=650, height=300, bg='#636363', highlightthickness=0).place(x=0, y=45)
+
+##Section of code that makes dynamic graph of whole CPU usage
+#Queue and flag variables needed
+wholeCPUUsageQueue = queue.Queue(20)
+for b in range(20):
+	wholeCPUUsageQueue.put(0)
+wholeCPUUsageFlagQueue = queue.Queue(1)
+
+#Makes figure (graph) to plot data on
+figWholeCPUUsage, axWholeCPUUsage = plt.subplots(1,1)
+#figWholeCPUUsage.figsize(6.5,2)
+#figWholeCPUUsage.dpi(100)
+#figWholeCPUUsage = Figure(figsize=(6.5,3), dpi=100)
+#axWholeCPUUsage = figWholeCPUUsage.add_subplot(111)
+axWholeCPUUsage.axis(ymin=0, ymax=100, xmin=0, xmax=20)
+firstTimexVals = np.arange(20)
+firstTimeyVals = []
+for a in range(wholeCPUUsageQueue.qsize()):
+				firstTimeyVals.append(wholeCPUUsageQueue.get(a))
+				wholeCPUUsageQueue.put(firstTimeyVals[a])
+axWholeCPUUsage.plot(firstTimexVals, firstTimeyVals)
+
+#Makes canvas on which the figure is drawn, places in tk instance
+fctaWholeCPUUsage = FigureCanvasTkAgg(figWholeCPUUsage, root)
+fctaWholeCPUUsage.draw()
+fctaWholeCPUUsage.get_tk_widget().place(x=0,y=44)
+
+#Method used by worker to update figure values
+def updateWholeCPUUsage(wholeCPUUsageQueue, wholeCPUUsageFlagQueue):
+	while True:
+		if (wholeCPUUsageFlagQueue.qsize() == 0):
+			print("Removing old first val")
+			temp = wholeCPUUsageQueue.get(0)
+			print("Getting new val")
+			newUsage = CPUInfo.getWholeCPULoad()
+			print("Putting new val")
+			wholeCPUUsageQueue.put(newUsage)
+			print("Updating flag")
+			wholeCPUUsageFlagQueue.put(True)
+		else:
+			print("Update Sleep")
+			time.sleep(1)
+
+#Method used by worker thread to display new figure
+def displayWholeCPUUsage(wholeCPUUsageQueue, wholeCPUUsageFlagQueue, axWholeCPUUsage, fctaWholeCPUUsage):
+	while True:
+		xVals = np.arange(20)
+		if (wholeCPUUsageFlagQueue.qsize() != 0):
+			print("Display Run")
+			yVals = []
+			print("Getting yvals")
+			for a in range(wholeCPUUsageQueue.qsize()):
+				yVals.append(wholeCPUUsageQueue.get(a))
+				wholeCPUUsageQueue.put(yVals[a])
+			print(yVals)
+			print("Queue vals length: " + str(wholeCPUUsageQueue.qsize()))
+			print("Plotting")
+			axWholeCPUUsage.clear()
+			axWholeCPUUsage.plot(xVals,yVals)
+			axWholeCPUUsage.axis(ymin=0, ymax=100, xmin=0, xmax=20)
+			#figWholeCPUUsage(
+			fctaWholeCPUUsage = FigureCanvasTkAgg(figWholeCPUUsage, root)
+			fctaWholeCPUUsage.get_renderer().clear()
+			fctaWholeCPUUsage.get_tk_widget().place(x=0,y=44)
+			print("Updating flag queue")
+			temp = wholeCPUUsageFlagQueue.get(0)
+			print(wholeCPUUsageFlagQueue.qsize())
+			#fctaWholeCPUUsage.draw()
+			#fctaWholeCPUUsage.flush_events()
+		else:
+			print("Display Sleep")
+			time.sleep(0.2)
+
+#Create worker threads
+figWholeCPUUsageUpdater = threading.Thread(target=updateWholeCPUUsage, args=(wholeCPUUsageQueue, wholeCPUUsageFlagQueue))
+figWholeCPUUsageUpdater.setDaemon(True)
+figWholeCPUUsageDisplayer = threading.Thread(target=displayWholeCPUUsage, args=(wholeCPUUsageQueue, wholeCPUUsageFlagQueue, axWholeCPUUsage, fctaWholeCPUUsage))
+figWholeCPUUsageDisplayer.setDaemon(True)
+
+#Start worker threads
+figWholeCPUUsageUpdater.start()
+figWholeCPUUsageDisplayer.start()
+
 
 root.mainloop()
