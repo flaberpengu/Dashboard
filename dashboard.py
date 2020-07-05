@@ -1,6 +1,5 @@
 import tkinter as tk
 import time
-from PIL import ImageTk,Image
 import datetime as dt
 import threading
 import queue

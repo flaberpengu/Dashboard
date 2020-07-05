@@ -7,7 +7,9 @@ CPU temps per core
 -constantly updating bar chart?
 
 overall CPU usage
--live line graph?
+-sort colouring
+-have moving head plotted at front of line?
+-title graph, label axes
 
 hdd usage
 -bar for each partition

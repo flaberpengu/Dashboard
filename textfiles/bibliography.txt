@@ -14,3 +14,13 @@ https://effbot.org/tkinterbook/tkinter-widget-styling.htm
 https://effbot.org/tkinterbook/canvas.htm
 https://www.tutorialspoint.com/python/python_multithreading.htm
 https://docs.python.org/3/library/threading.html
+//Live CPU Usage graph
+https://pythonprogramming.net/how-to-embed-matplotlib-graph-tkinter-gui/
+https://matplotlib.org/3.1.1/gallery/user_interfaces/embedding_in_tk_sgskip.html
+https://matplotlib.org/3.1.1/api/backend_agg_api.html#matplotlib.backends.backend_agg.FigureCanvasAgg
+https://stackoverflow.com/questions/10944621/dynamically-updating-plot-in-matplotlib
+https://stackoverflow.com/questions/8224894/setting-the-display-range-suplot-of-errorbars-in-matplotlib
+https://python-forum.io/Thread-Dynamic-graph-matplotlib
+https://pythonprogramming.net/embedding-live-matplotlib-graph-tkinter-gui/
+https://matplotlib.org/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure
+https://stackoverflow.com/questions/14088687/how-to-change-plot-background-color
