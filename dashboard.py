@@ -1,6 +1,5 @@
 import tkinter as tk
 import time
-#import processor_info
 from PIL import ImageTk,Image
 import datetime as dt
 import threading
@@ -84,7 +83,6 @@ def updateDatetime(datetimeQueue):
 	while True:
 		if (datetimeQueue.qsize() == 0):
 			datetimeQueue.put(dt.datetime.now())
-			#print("Updated")
 		else:
 			time.sleep(1)
 
@@ -92,10 +90,10 @@ def updateDatetime(datetimeQueue):
 def displayTime(datetimeQueue, dateFlagQueue):
 	while True:
 		if (datetimeQueue.qsize() != 0):
-			#print("GettingTime")
 			newTime = getTimeString(datetimeQueue.get(0))
 			datetimeQueue.task_done()
 			lblTime.configure(text=newTime)
+			#If new day, update date
 			if (newTime[0:1] == 0) and (newTime[3:4] == 0) and (newTime[6:7] == 0):
 				dateFlagQueue.put(dt.datetime.now())
 		else:
@@ -105,7 +103,6 @@ def displayTime(datetimeQueue, dateFlagQueue):
 def displayDate(datetimeQueue, dateFlagQueue, firstDateFlag):
 	while True:
 		if (dateFlagQueue.qsize() != 0) or (firstDateFlag == True):
-			print("GettingDate")
 			newDate = getDateString(dateFlagQueue.get(0))
 			dateFlagQueue.task_done()
 			firstDateFlag = False
@@ -134,18 +131,17 @@ for b in range(20):
 	wholeCPUUsageQueue.put(0)
 wholeCPUUsageFlagQueue = queue.Queue(1)
 
-#Makes figure (graph) to plot data on
+#Uses pyplot to make figure and axis of subplot
 figWholeCPUUsage, axWholeCPUUsage = plt.subplots(1,1)
+#Change figure settings
 figWholeCPUUsage.set_facecolor('#bfbfbf')
 figWholeCPUUsage.set_figwidth(6.5)
 figWholeCPUUsage.set_figheight(3)
 figWholeCPUUsage.set_dpi(100)
-#figWholeCPUUsage.figsize(6.5,2)
-#figWholeCPUUsage.dpi(100)
-#figWholeCPUUsage = Figure(figsize=(6.5,3), dpi=100)
-#axWholeCPUUsage = figWholeCPUUsage.add_subplot(111)
+#Change axis settings
 axWholeCPUUsage.axis(ymin=0, ymax=100, xmin=0, xmax=20)
 axWholeCPUUsage.set_facecolor('#bfbfbf')
+#Get values for base graph, plot on axes
 firstTimexVals = np.arange(20)
 firstTimeyVals = []
 for a in range(wholeCPUUsageQueue.qsize()):
@@ -162,16 +158,11 @@ fctaWholeCPUUsage.get_tk_widget().place(x=0,y=44)
 def updateWholeCPUUsage(wholeCPUUsageQueue, wholeCPUUsageFlagQueue):
 	while True:
 		if (wholeCPUUsageFlagQueue.qsize() == 0):
-			print("Removing old first val")
 			temp = wholeCPUUsageQueue.get(0)
-			print("Getting new val")
 			newUsage = CPUInfo.getWholeCPULoad()
-			print("Putting new val")
 			wholeCPUUsageQueue.put(newUsage)
-			print("Updating flag")
 			wholeCPUUsageFlagQueue.put(True)
 		else:
-			print("Update Sleep")
 			time.sleep(1)
 
 #Method used by worker thread to display new figure
@@ -179,30 +170,26 @@ def displayWholeCPUUsage(wholeCPUUsageQueue, wholeCPUUsageFlagQueue, axWholeCPUU
 	while True:
 		xVals = np.arange(20)
 		if (wholeCPUUsageFlagQueue.qsize() != 0):
-			print("Display Run")
+			#Get y values
 			yVals = []
-			print("Getting yvals")
 			for a in range(wholeCPUUsageQueue.qsize()):
+				#Since .get() removes from queue, I need to add back instantly
 				yVals.append(wholeCPUUsageQueue.get(a))
 				wholeCPUUsageQueue.put(yVals[a])
-			print(yVals)
-			print("Queue vals length: " + str(wholeCPUUsageQueue.qsize()))
-			print("Plotting")
+			#Clear current plot
 			axWholeCPUUsage.clear()
+			#Plot new values
 			axWholeCPUUsage.plot(xVals,yVals)
+			#Set axis settings
 			axWholeCPUUsage.axis(ymin=0, ymax=100, xmin=0, xmax=20)
 			axWholeCPUUsage.set_facecolor('#bfbfbf')
-			#figWholeCPUUsage(
+			#Recreate FCTA, clear renderer, place again -- no clue why it works but it does
 			fctaWholeCPUUsage = FigureCanvasTkAgg(figWholeCPUUsage, root)
 			fctaWholeCPUUsage.get_renderer().clear()
 			fctaWholeCPUUsage.get_tk_widget().place(x=0,y=44)
-			print("Updating flag queue")
+			#Clear flag that signifies display update is needed
 			temp = wholeCPUUsageFlagQueue.get(0)
-			print(wholeCPUUsageFlagQueue.qsize())
-			#fctaWholeCPUUsage.draw()
-			#fctaWholeCPUUsage.flush_events()
 		else:
-			print("Display Sleep")
 			time.sleep(0.2)
 
 #Create worker threads
