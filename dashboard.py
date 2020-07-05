@@ -32,6 +32,7 @@ lblTime = tk.Label(datetimeBar,
                    fg='#ffffff',
                    font=('Book Antiqua', 20))
 lblTime.place(x=545, y=3)
+
 #Method to get the correct string to display for the time
 def getTimeString(currentDatetime):
 	returnString = ""
@@ -116,24 +117,6 @@ dateDisplayer.setDaemon(True)
 datetimeUpdater.start()
 timeDisplayer.start()
 dateDisplayer.start()
-
-
-##Displays top bar with date and time
-#currentDateTime = dt.datetime.now()
-##Gets the string for the current date
-#if (len(str(currentDateTime.month)) == 1):
-#    if (len(str(currentDateTime.day)) == 1):
-#        dateBarString = "%i-0%i-0%i" % (currentDateTime.year, currentDateTime.month, currentDateTime.day)
-#    else:
-#        dateBarString = "%i-0%i-%i" % (currentDateTime.year, currentDateTime.month, currentDateTime.day)
-#else:
-#    if (len(str(currentDateTime.day)) == 1):
-#        dateBarString = "%i-%i-0%i" % (currentDateTime.year, currentDateTime.month, currentDateTime.day)
-#    else:
-#        dateBarString = "%i-%i-%i" % (currentDateTime.year, currentDateTime.month, currentDateTime.day)
-##TODO - Add dynamic time
-#timeBarString = "%i:%i" % (currentDateTime.hour, currentDateTime.minute)
-
 
 ##Gets and displays image of CPU use per core
 #processor_info.getCPUInfo()
